@@ -1,8 +1,10 @@
 package com.example.springboot.service.impl;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,24 @@ public class userServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@Override
 	public UserDto createUser(UserDto userDto) {
-		User user = UserMapper.maptoUser(userDto);
+
+		// converting userDto to user JPA entity
+//		User user = UserMapper.maptoUser(userDto);
+
+		// using modelMapper library
+		User user = modelMapper.map(userDto, User.class);
+
 		User save = userRepository.save(user);
-		return UserMapper.maptoUserDto(save);
+
+		// converting user jpa Entity to UserDto
+//		return UserMapper.maptoUserDto(save);
+
+		return modelMapper.map(save, UserDto.class);
 
 	}
 
@@ -31,26 +46,33 @@ public class userServiceImpl implements UserService {
 
 		User user = userRepository.findById(uid)
 				.orElseThrow(() -> new Exception("Resource not Found Exception..." + uid));
-		return UserMapper.maptoUserDto(user);
+
+//		return UserMapper.maptoUserDto(user);
+		return modelMapper.map(user, UserDto.class);
 	}
 
 	@Override
 	public List<UserDto> getAllUsers() {
 
 		List<User> findAll = userRepository.findAll();
-		return findAll.stream().map(UserMapper::maptoUserDto).collect(Collectors.toList());
+//		return findAll.stream().map(UserMapper::maptoUserDto).collect(Collectors.toList());
+		return findAll.stream().map((user) -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
 	}
 
 	@Override
 	public UserDto updateUser(UserDto updateUser) {
-		User user = UserMapper.maptoUser(updateUser);
+//		User user = UserMapper.maptoUser(updateUser);
+		User user = modelMapper.map(updateUser, User.class);
+
 		User existingUser = userRepository.findById(user.getId()).get();
 		existingUser.setFirstName(updateUser.getFirstName());
 		existingUser.setLastName(updateUser.getLastName());
 		existingUser.setEmail(updateUser.getEmail());
 
 		User updatedUser = userRepository.save(existingUser);
-		return UserMapper.maptoUserDto(updatedUser);
+
+//		return UserMapper.maptoUserDto(updatedUser);
+		return modelMapper.map(updatedUser, UserDto.class);
 
 	}
 
