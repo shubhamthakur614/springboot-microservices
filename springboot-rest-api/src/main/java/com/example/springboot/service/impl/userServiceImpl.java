@@ -1,7 +1,6 @@
 package com.example.springboot.service.impl;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.springboot.dto.UserDto;
 import com.example.springboot.entity.User;
-import com.example.springboot.mapper.UserMapper;
+import com.example.springboot.mapper.AutoUserMapper;
 import com.example.springboot.repository.UserRepository;
 import com.example.springboot.service.UserService;
 
@@ -30,14 +29,17 @@ public class userServiceImpl implements UserService {
 //		User user = UserMapper.maptoUser(userDto);
 
 		// using modelMapper library
-		User user = modelMapper.map(userDto, User.class);
+//		User user = modelMapper.map(userDto, User.class);
+
+		User user = AutoUserMapper.mapper.mapToUser(userDto);
 
 		User save = userRepository.save(user);
 
 		// converting user jpa Entity to UserDto
 //		return UserMapper.maptoUserDto(save);
 
-		return modelMapper.map(save, UserDto.class);
+//		return modelMapper.map(save, UserDto.class);
+		return AutoUserMapper.mapper.maptoUserDto(save);
 
 	}
 
