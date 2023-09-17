@@ -1,0 +1,48 @@
+package com.example.springboot.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.springboot.entity.User;
+import com.example.springboot.repository.UserRepository;
+import com.example.springboot.service.UserService;
+
+@Service
+public class userServiceImpl implements UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public User createUser(User user) {
+
+		return userRepository.save(user);
+	}
+
+	@Override
+	public User getUserById(Long uid) {
+		userRepository.findById(uid).orElseGet(()->new Exception ("Resource not Found Exception..."+uid))
+		return null;
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+
+		return null;
+	}
+
+	@Override
+	public User updateUser(User updateUser) {
+
+		return null;
+	}
+
+	@Override
+	public String deleteUser(Long uid) {
+
+		return null;
+	}
+
+}

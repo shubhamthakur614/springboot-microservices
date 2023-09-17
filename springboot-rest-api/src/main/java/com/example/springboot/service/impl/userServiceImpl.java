@@ -1,11 +1,14 @@
 package com.example.springboot.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.springboot.dto.UserDto;
 import com.example.springboot.entity.User;
+import com.example.springboot.mapper.UserMapper;
 import com.example.springboot.repository.UserRepository;
 import com.example.springboot.service.UserService;
 
@@ -16,32 +19,39 @@ public class userServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public User createUser(User user) {
+	public UserDto createUser(UserDto userDto) {
+		User user = UserMapper.maptoUser(userDto);
+		User save = userRepository.save(user);
+		return UserMapper.maptoUserDto(save);
 
-		return userRepository.save(user);
 	}
 
 	@Override
-	public User getUserById(Long uid) throws Exception {
+	public UserDto getUserById(Long uid) throws Exception {
+
 		User user = userRepository.findById(uid)
 				.orElseThrow(() -> new Exception("Resource not Found Exception..." + uid));
-		return user;
+		return UserMapper.maptoUserDto(user);
 	}
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<UserDto> getAllUsers() {
 
-		return userRepository.findAll();
+		List<User> findAll = userRepository.findAll();
+		return findAll.stream().map(UserMapper::maptoUserDto).collect(Collectors.toList());
 	}
 
 	@Override
-	public User updateUser(User updateUser) {
-		User existingUser = userRepository.findById(updateUser.getId()).get();
+	public UserDto updateUser(UserDto updateUser) {
+		User user = UserMapper.maptoUser(updateUser);
+		User existingUser = userRepository.findById(user.getId()).get();
 		existingUser.setFirstName(updateUser.getFirstName());
 		existingUser.setLastName(updateUser.getLastName());
 		existingUser.setEmail(updateUser.getEmail());
 
-		return userRepository.save(existingUser);
+		User updatedUser = userRepository.save(existingUser);
+		return UserMapper.maptoUserDto(updatedUser);
+
 	}
 
 	@Override

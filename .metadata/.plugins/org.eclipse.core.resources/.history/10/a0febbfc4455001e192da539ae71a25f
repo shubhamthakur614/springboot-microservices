@@ -1,0 +1,8 @@
+package com.example.springboot.mapper;
+
+import lombok.Data;
+
+@Data
+public class UserMapper {
+
+}

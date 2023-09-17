@@ -2,17 +2,17 @@ package com.example.springboot.service;
 
 import java.util.List;
 
-import com.example.springboot.entity.User;
+import com.example.springboot.dto.UserDto;
 
 public interface UserService {
 
-	User createUser(User user);
+	UserDto createUser(UserDto userDtoo);
 
-	User getUserById(Long uid) throws Exception;
+	UserDto getUserById(Long uid) throws Exception;
 
-	List<User> getAllUsers();
+	List<UserDto> getAllUsers();
 
-	User updateUser(User updateUser);
+	UserDto updateUser(UserDto updateUser);
 
 	String deleteUser(Long uid) throws Exception;
 

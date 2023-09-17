@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.springboot.entity.User;
+import com.example.springboot.dto.UserDto;
 import com.example.springboot.service.UserService;
 
 @RestController
@@ -25,34 +25,33 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("create")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
-		User createdUser = userService.createUser(user);
+	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+		UserDto createdUser = userService.createUser(userDto);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") Long uid) throws Exception {
-		User getUser = userService.getUserById(uid);
+	public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long uid) throws Exception {
+		UserDto getUser = userService.getUserById(uid);
 		return ResponseEntity.ok(getUser);
 	}
 
 	@GetMapping("alluser")
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> allUsers = userService.getAllUsers();
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		List<UserDto> allUsers = userService.getAllUsers();
 		return new ResponseEntity<>(allUsers, HttpStatus.OK);
 	}
 
 	@PutMapping("updateuser")
-	public ResponseEntity<User> updateUser(@RequestBody User updateUser) {
-		User updatedUser = userService.updateUser(updateUser);
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto updateUser) {
+		UserDto updatedUser = userService.updateUser(updateUser);
 		return ResponseEntity.ok(updatedUser);
 	}
-	
+
 	@DeleteMapping("{id}/delete")
-	public ResponseEntity<String>deleteUser(@PathVariable("id")Long uid) throws Exception
-	{
-		String status=userService.deleteUser(uid);
-		return new ResponseEntity<>(status,HttpStatus.OK);
+	public ResponseEntity<String> deleteUser(@PathVariable("id") Long uid) throws Exception {
+		String status = userService.deleteUser(uid);
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 
 }
