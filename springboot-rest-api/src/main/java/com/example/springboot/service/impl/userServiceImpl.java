@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.springboot.dto.UserDto;
 import com.example.springboot.entity.User;
+import com.example.springboot.exception.ResourceNotFoundException;
 import com.example.springboot.mapper.AutoUserMapper;
 import com.example.springboot.repository.UserRepository;
 import com.example.springboot.service.UserService;
@@ -46,8 +47,7 @@ public class userServiceImpl implements UserService {
 	@Override
 	public UserDto getUserById(Long uid) throws Exception {
 
-		User user = userRepository.findById(uid)
-				.orElseThrow(() -> new Exception("Resource not Found Exception..." + uid));
+		User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
 
 //		return UserMapper.maptoUserDto(user);
 		return modelMapper.map(user, UserDto.class);
@@ -66,7 +66,8 @@ public class userServiceImpl implements UserService {
 //		User user = UserMapper.maptoUser(updateUser);
 		User user = modelMapper.map(updateUser, User.class);
 
-		User existingUser = userRepository.findById(user.getId()).get();
+		User existingUser = userRepository.findById(user.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", user.getId()));
 		existingUser.setFirstName(updateUser.getFirstName());
 		existingUser.setLastName(updateUser.getLastName());
 		existingUser.setEmail(updateUser.getEmail());
@@ -81,7 +82,7 @@ public class userServiceImpl implements UserService {
 	@Override
 	public String deleteUser(Long uid) throws Exception {
 		User existingUser = userRepository.findById(uid)
-				.orElseThrow(() -> new Exception("Resource not Found Exception..." + uid));
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
 
 		userRepository.deleteById(existingUser.getId());
 		return "user Deleted sucessfully with user ID:" + uid;
