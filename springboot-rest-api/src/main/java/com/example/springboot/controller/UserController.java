@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.springboot.dto.UserDto;
 import com.example.springboot.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -25,7 +27,7 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("create")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 		UserDto createdUser = userService.createUser(userDto);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
@@ -43,7 +45,7 @@ public class UserController {
 	}
 
 	@PutMapping("updateuser")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto updateUser) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto updateUser) {
 		UserDto updatedUser = userService.updateUser(updateUser);
 		return ResponseEntity.ok(updatedUser);
 	}
