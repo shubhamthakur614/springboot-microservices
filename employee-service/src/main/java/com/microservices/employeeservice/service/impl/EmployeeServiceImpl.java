@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.microservices.employeeservice.dto.ApiResponseDto;
 import com.microservices.employeeservice.dto.DepartmentDto;
@@ -25,6 +26,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private RestTemplate restTemplate;
 
+	private WebClient webClient;
+
 	@Override
 	public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
 		Employee employee = modelMapper.map(employeeDto, Employee.class);
@@ -37,10 +40,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeRespository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
 
-		System.out.println("http://localhost:8080/api/departments/" + employee.getDepartmentCode());
-		ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity(
-				"http://localhost:8080/api/departments/" + employee.getDepartmentCode(), DepartmentDto.class);
-		DepartmentDto departmentDto = responseEntity.getBody();
+		// Rest template Call
+//		ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity(
+//				"http://localhost:8080/api/departments/" + employee.getDepartmentCode(), DepartmentDto.class);
+//		DepartmentDto departmentDto = responseEntity.getBody();
+
+		// micro communication using webClient
+		DepartmentDto departmentDto = webClient.get()
+				.uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode()).retrieve()
+				.bodyToMono(DepartmentDto.class).block();
 
 		EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
 		ApiResponseDto apiResponseDto = new ApiResponseDto(employeeDto, departmentDto);
