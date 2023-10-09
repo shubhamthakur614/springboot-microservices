@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.microservices.employeeservice.dto.ApiResponseDto;
 import com.microservices.employeeservice.dto.EmployeeDto;
 import com.microservices.employeeservice.service.EmployeeService;
 
@@ -29,10 +30,16 @@ public class EmployeeController {
 	}
 
 	// @Path param used to pass value i url with "?" ex. /api/departments?code=10
-	@GetMapping("/{id}")
-	public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") long id) {
-		EmployeeDto EmployeeById = employeeService.getEmployeeById(id);
-		return new ResponseEntity<>(EmployeeById, HttpStatus.OK);
-	}
+//	@GetMapping("/{id}")
+//	public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") long id) {
+//		EmployeeDto EmployeeById = employeeService.getEmployeeById(id);
+//		return new ResponseEntity<>(EmployeeById, HttpStatus.OK);
+//	}
 
+	// modifying method for the communication between employee and department
+	@GetMapping("/{id}")
+	public ResponseEntity<ApiResponseDto> getEmployeeById(@PathVariable("id") long id) {
+		ApiResponseDto apiResponseDto = employeeService.getEmployeeById(id);
+		return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
+	}
 }
