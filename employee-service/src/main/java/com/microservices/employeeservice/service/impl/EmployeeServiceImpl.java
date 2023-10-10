@@ -12,6 +12,7 @@ import com.microservices.employeeservice.dto.EmployeeDto;
 import com.microservices.employeeservice.entity.Employee;
 import com.microservices.employeeservice.exception.ResourceNotFoundException;
 import com.microservices.employeeservice.repository.EmployeeRespository;
+import com.microservices.employeeservice.service.ApiClient;
 import com.microservices.employeeservice.service.EmployeeService;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +28,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private RestTemplate restTemplate;
 
 	private WebClient webClient;
+
+	private ApiClient apiClient;
 
 	@Override
 	public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -46,10 +49,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 //		DepartmentDto departmentDto = responseEntity.getBody();
 
 		// micro communication using webClient
-		DepartmentDto departmentDto = webClient.get()
-				.uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode()).retrieve()
-				.bodyToMono(DepartmentDto.class).block();
+//		DepartmentDto departmentDto = webClient.get()
+//				.uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode()).retrieve()
+//				.bodyToMono(DepartmentDto.class).block();
 
+		// to use open feign we are hidding above method
+		DepartmentDto departmentDto = apiClient.getDepartmentByDepartmentCode(employee.getDepartmentCode());
 		EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
 		ApiResponseDto apiResponseDto = new ApiResponseDto(employeeDto, departmentDto);
 		return apiResponseDto;
