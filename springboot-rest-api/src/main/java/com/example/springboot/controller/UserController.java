@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.springboot.dto.UserDto;
 import com.example.springboot.service.UserService;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/user")
@@ -39,8 +41,10 @@ public class UserController {
 	}
 
 	@GetMapping("alluser")
-	public ResponseEntity<List<UserDto>> getAllUsers() {
-		List<UserDto> allUsers = userService.getAllUsers();
+	public ResponseEntity<List<UserDto>> getAllUsers(
+			@RequestParam(value = "offset", defaultValue = "0", required = false) Integer offset,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageNumber) {
+		List<UserDto> allUsers = userService.getAllUsers(offset, pageNumber);
 		return new ResponseEntity<>(allUsers, HttpStatus.OK);
 	}
 

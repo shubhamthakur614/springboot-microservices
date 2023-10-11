@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.springboot.dto.UserDto;
@@ -54,11 +58,13 @@ public class userServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto> getAllUsers() {
+	public List<UserDto> getAllUsers(Integer offset, Integer pageSize) {
 
-		List<User> findAll = userRepository.findAll();
+		// here i am implementing pagination
+		Page<User> page = userRepository.findAll(PageRequest.of(offset, pageSize));
+		List<User> allUser = page.getContent();
 //		return findAll.stream().map(UserMapper::maptoUserDto).collect(Collectors.toList());
-		return findAll.stream().map((user) -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+		return allUser.stream().map((user) -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
 	}
 
 	@Override

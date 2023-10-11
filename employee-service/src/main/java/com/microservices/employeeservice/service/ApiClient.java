@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.microservices.employeeservice.dto.DepartmentDto;
 
-@FeignClient(url = "http://localhost:8080", name = "Department-Service")
+@FeignClient(name = "DEPARTMENT-SERVICE")
 public interface ApiClient {
 	//what ever the controller method we are call that method we have to give here and it automatically 
 	//did the method implementation of that method

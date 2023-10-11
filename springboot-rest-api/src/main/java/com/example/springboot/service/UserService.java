@@ -10,7 +10,7 @@ public interface UserService {
 
 	UserDto getUserById(Long uid) throws Exception;
 
-	List<UserDto> getAllUsers();
+	List<UserDto> getAllUsers(Integer offset,Integer pageSize);
 
 	UserDto updateUser(UserDto updateUser);
 

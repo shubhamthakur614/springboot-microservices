@@ -25,9 +25,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private ModelMapper modelMapper;
 
-	private RestTemplate restTemplate;
-
-	private WebClient webClient;
+//	private RestTemplate restTemplate;
+//
+//	private WebClient webClient;
 
 	private ApiClient apiClient;
 
